@@ -10,7 +10,7 @@ import { TextBoxVariableModel } from '../types';
 
 export interface Props extends VariableEditorProps<TextBoxVariableModel> {}
 
-export function TextBoxVariableEditor({ onPropChange, variable: { query } }: Props): ReactElement {
+export function TextBoxVariableEditor({ onPropChange, variable: { query, width } }: Props): ReactElement {
   const updateVariable = useCallback(
     (event: FormEvent<HTMLInputElement>, updateOptions: boolean) => {
       event.preventDefault();
@@ -19,12 +19,22 @@ export function TextBoxVariableEditor({ onPropChange, variable: { query } }: Pro
     },
     [onPropChange]
   );
+  const updateWidthVariable = useCallback(
+    (event: ChangeEvent<HTMLInputElement>, updateOptions: boolean) => {
+      event.preventDefault();
+      onPropChange({ propName: 'width', propValue: event.target.value, updateOptions });
+    },
+    [onPropChange]
+  );
 
   const onChange = useCallback((e: FormEvent<HTMLInputElement>) => updateVariable(e, false), [updateVariable]);
+  const onWidthChange = useCallback((e: ChangeEvent<HTMLInputElement>) => updateWidthVariable(e, false), [
+    updateVariable,
+  ]);
   const onBlur = useCallback((e: FormEvent<HTMLInputElement>) => updateVariable(e, true), [updateVariable]);
 
   return (
-    <VerticalGroup spacing="xs">
+    <VerticalGroup spacing="none">
       <VariableSectionHeader name="Text options" />
       <VariableTextField
         value={query}
@@ -35,6 +45,14 @@ export function TextBoxVariableEditor({ onPropChange, variable: { query } }: Pro
         labelWidth={20}
         grow
         testId={selectors.pages.Dashboard.Settings.Variables.Edit.TextBoxVariable.textBoxOptionsQueryInputV2}
+      />
+      <VariableTextField
+        type="number"
+        value={width}
+        name="Width"
+        placeholder="defualt value, if any"
+        onChange={onWidthChange}
+        labelWidth={20}
       />
     </VerticalGroup>
   );

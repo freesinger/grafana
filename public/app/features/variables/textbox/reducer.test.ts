@@ -71,4 +71,13 @@ describe('textBoxVariableReducer', () => {
         });
     });
   });
+
+  describe('when the TextBox is initialized', () => {
+    it('then the default width should be correct', () => {
+      const { initialState } = getVariableTestContext(adapter);
+      const textBox = initialState['0'] as TextBoxVariableModel;
+
+      expect(textBox.width).toBe('192');
+    });
+  });
 });
